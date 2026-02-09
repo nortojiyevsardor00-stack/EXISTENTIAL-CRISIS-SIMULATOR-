@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meni sevasanmi? 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated hearts background */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0;
+            animation: floatHeart 8s infinite;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Main container */
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 60px 80px;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            width: 90%;
+            backdrop-filter: blur(10px);
+        }
+
+        .emoji {
+            font-size: 120px;
+            animation: pulse 2s infinite;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question {
+            font-size: 1.8em;
+            color: #555;
+            margin-bottom: 50px;
+            font-weight: 500;
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+            min-height: 100px;
+            position: relative;
+        }
+
+        .btn {
+            padding: 20px 50px;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            position: relative;
+            z-index: 10;
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.5);
+        }
+
+        .btn-yes:active {
+            transform: scale(1.05);
+        }
+
+        .btn-no {
+            background: linear-gradient(135deg, #e0e0e0 0%, #b0b0b0 100%);
+            color: #555;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .btn-no.moving {
+            position: absolute;
+        }
+
+        .btn-no:hover {
+            background: linear-gradient(135deg, #d0d0d0 0%, #a0a0a0 100%);
+        }
+
+        /* Success screen */
+        .success-screen {
+            display: none;
+            text-align: center;
+            animation: successAppear 1s ease-out;
+        }
+
+        @keyframes successAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .success-screen.active {
+            display: block;
+        }
+
+        .success-emoji {
+            font-size: 150px;
+            animation: heartBeat 1.5s infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            10%, 30% {
+                transform: scale(1.2);
+            }
+            20%, 40% {
+                transform: scale(1.1);
+            }
+        }
+
+        .success-title {
+            font-size: 3.5em;
+            color: #f5576c;
+            margin: 30px 0;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .success-message {
+            font-size: 2em;
+            color: #667eea;
+            margin: 20px 0;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        /* Fireworks effect */
+        .firework {
+            position: fixed;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty));
+                opacity: 0;
+            }
+        }
+
+        /* Sparkles */
+        .sparkle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999;
+            animation: sparkleAnim 1s ease-out forwards;
+        }
+
+        @keyframes sparkleAnim {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5) rotate(180deg);
+                opacity: 0;
+            }
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 30px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .question {
+                font-size: 1.3em;
+            }
+
+            .btn {
+                padding: 15px 35px;
+                font-size: 1.2em;
+            }
+
+            .success-title {
+                font-size: 2.5em;
+            }
+
+            .success-message {
+                font-size: 1.5em;
+            }
+        }
+
+        /* Hint text */
+        .hint {
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.8);
+            font-style: italic;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .hint.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <div class="container">
+        <div id="questionScreen">
+            <span class="emoji">💝</span>
+            <h1>Sevgilim!</h1>
+            <p class="question">Meni sevasanmi?</p>
+            
+            <div class="buttons-container" id="buttonsContainer">
+                <button class="btn btn-yes" id="btnYes">Ha ❤️</button>
+                <button class="btn btn-no" id="btnNo">Yo'q</button>
+            </div>
+            
+            <div class="hint" id="hint"></div>
+        </div>
+
+        <div class="success-screen" id="successScreen">
+            <div class="success-emoji">💕💖💕</div>
+            <h2 class="success-title" id="successTitle">Bilardim!</h2>
+            <p class="success-message" id="successMessage1">Sevishingni!</p>
+            <p class="success-message" id="successMessage2">Men ham seni juda ko'p sevaman! 💗</p>
+            <div class="success-emoji" style="font-size: 100px; margin-top: 30px;">😍🥰😘</div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating hearts background
+        const heartsContainer = document.getElementById('heartsContainer');
+        const heartEmojis = ['❤️', '💕', '💖', '💗', '💓', '💝', '💘', '💞'];
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (5 + Math.random() * 5) + 's';
+            heart.style.animationDelay = Math.random() * 3 + 's';
+            heart.style.fontSize = (15 + Math.random() * 20) + 'px';
+            heartsContainer.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 10000);
+        }
+
+        // Create hearts periodically
+        setInterval(createHeart, 300);
+        for (let i = 0; i < 10; i++) {
+            setTimeout(createHeart, i * 200);
+        }
+
+        // Game logic
+        const btnYes = document.getElementById('btnYes');
+        const btnNo = document.getElementById('btnNo');
+        const buttonsContainer = document.getElementById('buttonsContainer');
+        const questionScreen = document.getElementById('questionScreen');
+        const successScreen = document.getElementById('successScreen');
+        const hint = document.getElementById('hint');
+
+        let noClickCount = 0;
+        let isNoButtonMoving = false;
+
+        const hints = [
+            "Iltimos, yana o'ylab ko'ring... 🥺",
+            "Rostdan ham yo'qmi? 💔",
+            "Yuragimni sindirmoqchimisiz? 😢",
+            "Faqat 'Ha'ni bosing! 😊",
+            "Nega qochib yuribsiz? 😅",
+            "Men kutaman... ❤️",
+            "Siz meni sevasiz, bilaman! 😌",
+            "Endi 'Ha'ni bosish vaqti keldi! 💕",
+            "Iltimos... 🥺👉👈",
+            "Yolg'on gapirmang, sevasiz-ku! 😏"
+        ];
+
+        const successMessages = [
+            {
+                title: "Bilardim!",
+                message1: "Sevishingni!",
+                message2: "Men ham seni juda-juda ko'p sevaman! 💗"
+            },
+            {
+                title: "Hurmatli!",
+                message1: "Yuragimni yutib yubordingiz!",
+                message2: "Siz mening hayotim va baxtim! 🌟"
+            },
+            {
+                title: "Ajoyib!",
+                message1: "Eng to'g'ri javobni tanladingiz!",
+                message2: "Siz - mening dunyom, mening hamma narsam! 💖"
+            },
+            {
+                title: "Barakalla!",
+                message1: "Sizni sevmaslik mumkin emas!",
+                message2: "Siz menga butun olamdan qimmatli! 🌹"
+            },
+            {
+                title: "Zo'r!",
+                message1: "Yuragim faqat siz uchun uradi!",
+                message2: "Abadiy sevaman sizni, hayotim! 💕"
+            }
+        ];
+
+        // Position No button randomly but slower
+        function moveNoButton() {
+            if (!isNoButtonMoving) {
+                isNoButtonMoving = true;
+                btnNo.classList.add('moving');
+                // Set initial position
+                const container = buttonsContainer.getBoundingClientRect();
+                btnNo.style.left = '200px';
+                btnNo.style.top = '0px';
+            }
+
+            noClickCount++;
+
+            const container = buttonsContainer.getBoundingClientRect();
+            const button = btnNo.getBoundingClientRect();
+            const yesRect = btnYes.getBoundingClientRect();
+            const containerRect = buttonsContainer.getBoundingClientRect();
+            
+            // Show hint
+            if (noClickCount > 0 && noClickCount <= hints.length) {
+                hint.textContent = hints[Math.min(noClickCount - 1, hints.length - 1)];
+                hint.classList.add('show');
+                setTimeout(() => {
+                    hint.classList.remove('show');
+                }, 2500);
+            }
+
+            // Calculate Yes button position relative to container
+            const yesX = yesRect.left - containerRect.left;
+            const yesY = yesRect.top - containerRect.top;
+
+            let newX, newY;
+
+            // First 3 clicks: move randomly but away from Yes
+            if (noClickCount <= 3) {
+                const maxX = container.width - button.width - 40;
+                const maxY = 60; // Keep in same horizontal area
+                
+                newX = Math.random() * maxX;
+                newY = (Math.random() - 0.5) * maxY;
+                
+                // Make sure it's not too close to Yes button
+                if (Math.abs(newX - yesX) < 150) {
+                    newX = newX < yesX ? Math.max(0, newX - 100) : Math.min(maxX, newX + 100);
+                }
+            }
+            // Clicks 4-7: Start moving towards Yes slowly
+            else if (noClickCount <= 7) {
+                const currentX = parseFloat(btnNo.style.left) || 200;
+                const currentY = parseFloat(btnNo.style.top) || 0;
+                
+                const progress = (noClickCount - 3) / 4; // 0.25, 0.5, 0.75, 1.0
+                newX = currentX + (yesX - currentX) * progress * 0.3;
+                newY = currentY + (yesY - currentY) * progress * 0.3;
+            }
+            // Clicks 8-12: Move closer and closer
+            else if (noClickCount <= 12) {
+                const currentX = parseFloat(btnNo.style.left) || 200;
+                const currentY = parseFloat(btnNo.style.top) || 0;
+                
+                const progress = (noClickCount - 7) / 5; // Progressive movement
+                newX = currentX + (yesX - currentX) * progress * 0.5;
+                newY = currentY + (yesY - currentY) * progress * 0.5;
+            }
+            // After 12 clicks: Move directly below Yes button
+            else {
+                const currentX = parseFloat(btnNo.style.left) || 200;
+                const currentY = parseFloat(btnNo.style.top) || 0;
+                
+                const targetY = yesRect.bottom - containerRect.top + 15;
+                
+                newX = currentX + (yesX - currentX) * 0.4;
+                newY = currentY + (targetY - currentY) * 0.4;
+                
+                // After 15 clicks, put it exactly below
+                if (noClickCount >= 15) {
+                    newX = yesX;
+                    newY = targetY;
+                }
+            }
+
+            // Smooth transition
+            btnNo.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            btnNo.style.left = newX + 'px';
+            btnNo.style.top = newY + 'px';
+
+            // Make Yes button slightly bigger with each No click
+            const newSize = 1 + (noClickCount * 0.05);
+            btnYes.style.transform = `scale(${Math.min(newSize, 1.4)})`;
+
+            // Create sparkle effect
+            createSparkle(button.left + button.width / 2, button.top + button.height / 2);
+        }
+
+        // No button hover and click
+        btnNo.addEventListener('mouseenter', moveNoButton);
+        btnNo.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveNoButton();
+        });
+        btnNo.addEventListener('click', (e) => {
+            e.preventDefault();
+            moveNoButton();
+        });
+
+        // Yes button click
+        btnYes.addEventListener('click', () => {
+            showSuccess();
+        });
+
+        // Show success screen with effects
+        function showSuccess() {
+            questionScreen.style.display = 'none';
+            successScreen.classList.add('active');
+
+            // Random romantic message
+            const randomMessage = successMessages[Math.floor(Math.random() * successMessages.length)];
+            document.getElementById('successTitle').textContent = randomMessage.title;
+            document.getElementById('successMessage1').textContent = randomMessage.message1;
+            document.getElementById('successMessage2').textContent = randomMessage.message2;
+
+            // Create fireworks
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    createFirework();
+                }, i * 100);
+            }
+
+            // Create more hearts
+            for (let i = 0; i < 30; i++) {
+                setTimeout(createHeart, i * 100);
+            }
+
+            // Play sound effect (simple beep using Web Audio API)
+            playSuccessSound();
+        }
+
+        // Create firework effect
+        function createFirework() {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight * 0.7;
+
+            const colors = ['#f093fb', '#f5576c', '#667eea', '#764ba2', '#ff6ec4', '#ffd93d'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+
+            for (let i = 0; i < 30; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.left = x + 'px';
+                firework.style.top = y + 'px';
+                firework.style.background = color;
+
+                const angle = (Math.PI * 2 * i) / 30;
+                const velocity = 50 + Math.random() * 100;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+
+                firework.style.setProperty('--tx', tx + 'px');
+                firework.style.setProperty('--ty', ty + 'px');
+                firework.style.animation = 'explode 1s ease-out forwards';
+
+                document.body.appendChild(firework);
+
+                setTimeout(() => {
+                    firework.remove();
+                }, 1000);
+            }
+        }
+
+        // Create sparkle effect
+        function createSparkle(x, y) {
+            const sparkles = ['✨', '⭐', '💫', '🌟'];
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+            sparkle.style.fontSize = '30px';
+            document.body.appendChild(sparkle);
+
+            setTimeout(() => {
+                sparkle.remove();
+            }, 1000);
+        }
+
+        // Play success sound using Web Audio API
+        function playSuccessSound() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Create a sequence of notes
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // C, E, G, C
+            
+            notes.forEach((frequency, index) => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = frequency;
+                oscillator.type = 'sine';
+                
+                const startTime = audioContext.currentTime + (index * 0.15);
+                gainNode.gain.setValueAtTime(0.3, startTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3);
+                
+                oscillator.start(startTime);
+                oscillator.stop(startTime + 0.3);
+            });
+        }
+    </script>
+</body>
+</html>
